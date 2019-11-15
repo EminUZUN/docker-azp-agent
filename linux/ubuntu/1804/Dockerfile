@@ -109,29 +109,29 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
 # Install Go
 RUN curl -sL https://dl.google.com/go/go1.11.13.linux-amd64.tar.gz -o go1.11.13.linux-amd64.tar.gz && \
   mkdir -p /usr/local/go1.11.13 && \
-   tar -C /usr/local/go1.11.13 -xzf go1.11.13.linux-amd64.tar.gz --strip-components=1 go && \
-   rm go1.11.13.linux-amd64.tar.gz
+  tar -C /usr/local/go1.11.13 -xzf go1.11.13.linux-amd64.tar.gz --strip-components=1 go && \
+  rm go1.11.13.linux-amd64.tar.gz
 RUN curl -sL https://dl.google.com/go/go1.12.13.linux-amd64.tar.gz -o go1.12.13.linux-amd64.tar.gz && \
   mkdir -p /usr/local/go1.12.13 && \
-   tar -C /usr/local/go1.12.13 -xzf go1.12.13.linux-amd64.tar.gz --strip-components=1 go && \
-   rm go1.12.13.linux-amd64.tar.gz
+  tar -C /usr/local/go1.12.13 -xzf go1.12.13.linux-amd64.tar.gz --strip-components=1 go && \
+  rm go1.12.13.linux-amd64.tar.gz
 RUN curl -sL https://dl.google.com/go/go1.13.4.linux-amd64.tar.gz -o go1.13.4.linux-amd64.tar.gz && \
   mkdir -p /usr/local/go1.13.4 && \
-   tar -C /usr/local/go1.13.4 -xzf go1.13.4.linux-amd64.tar.gz --strip-components=1 go && \
-   rm go1.13.4.linux-amd64.tar.gz
+  tar -C /usr/local/go1.13.4 -xzf go1.13.4.linux-amd64.tar.gz --strip-components=1 go && \
+  rm go1.13.4.linux-amd64.tar.gz
 ENV GOROOT_1_11_X64=/usr/local/go1.11.13 \
-    GOROOT_1_12_X64=/usr/local/go1.12.13 \
-    GOROOT_1_13_X64=/usr/local/go1.13.4 \
-    GOROOT=/usr/local/go1.12.13
+  GOROOT_1_12_X64=/usr/local/go1.12.13 \
+  GOROOT_1_13_X64=/usr/local/go1.13.4 \
+  GOROOT=/usr/local/go1.12.13
 ENV PATH $PATH:$GOROOT/bin
 
 # Install Google Chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
- echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list && \
- apt-get update && \
- apt-get install -y --no-install-recommends \
-   google-chrome-stable && \
- rm -rf /var/lib/apt/lists/* \
+  echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list && \
+  apt-get update && \
+  apt-get install -y --no-install-recommends \
+    google-chrome-stable && \
+  rm -rf /var/lib/apt/lists/* \
 ENV CHROME_BIN /usr/bin/google-chrome
 
 # Install Httpie
