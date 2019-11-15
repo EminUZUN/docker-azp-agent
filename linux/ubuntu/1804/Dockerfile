@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
     apt-transport-https \
+    ca-certificates \
     curl \
     dbus \
     dnsutils \
@@ -33,7 +34,7 @@ RUN apt-get update && \
     sudo \
     telnet \
     time \
-    tzdata \ 
+    tzdata \
     unzip \
     wget \
     xorriso \
@@ -55,12 +56,27 @@ RUN apt-get update && \
     build-essential && \
   rm -rf /var/lib/apt/lists/*
 
+# Install 7-zip
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+    p7zip \
+    p7zip-full \
+    p7zip-rar && \
+  rm -rf /var/lib/apt/lists/*
+
 # Install Ansible PPA and latest Ansible
 RUN add-apt-repository -y ppa:ansible/ansible && \
    apt-get update && \
    apt-get install -y --no-install-recommends \
      ansible && \
    rm -rf /var/lib/apt/lists/*
+
+# Install AWS CLI
+RUN curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+  unzip -o awscliv2.zip && \
+  ./aws/install && \
+  rm awscliv2.zip && \
+  rm -rf aws
 
 # Install Azure CLI
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb \
@@ -124,7 +140,7 @@ RUN wget -O gradleReleases.html https://gradle.org/releases/ && \
   ln -fs /usr/share/gradle-"${gradleVersion}"/bin/gradle /usr/bin/gradle
 ENV GRADLE_HOME=/usr/share/gradle
 
-## Install kubectl
+# Install kubectl
 RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
   touch /etc/apt/sources.list.d/kubernetes.list && \
   echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list && \
@@ -133,6 +149,66 @@ RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add 
     kubectl && \
   rm -rf /var/lib/apt/lists/*
 
-## Install Helm 3
-RUN curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
-  | bash
+# Install Helm 3
+RUN curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
+# Install MySQL Client
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+    mysql-client && \
+  rm -rf /var/lib/apt/lists/*
+
+# Install Node.js
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash && \
+  apt-get install -y --no-install-recommends \
+    nodejs -y && \
+  rm -rf /var/lib/apt/lists/*
+
+# Install Yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+  echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+  apt-get update && \
+  apt-get install -y --no-install-recommends \
+    yarn && \
+  rm -rf /var/lib/apt/lists/*
+
+# Install Packer
+RUN PACKER_VERSION=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/packer | jq -r .current_version) && \
+  curl -LO "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip" && \
+  unzip -o "packer_${PACKER_VERSION}_linux_amd64.zip" -d /usr/local/bin && \
+  rm -f "packer_${PACKER_VERSION}_linux_amd64.zip"
+
+# Install Python
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+    python \
+    python-dev \
+    python-pip \
+    python3 \
+    python3-dev \
+    python3-pip && \
+  rm -rf /var/lib/apt/lists/*
+
+# Install Subversion
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+    subversion && \
+  rm -rf /var/lib/apt/lists/*
+
+# Install Terraform
+RUN TERRAFORM_VERSION=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r .current_version) && \
+  curl -LO "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" && \
+  unzip -o "terraform_${TERRAFORM_VERSION}_linux_amd64.zip" -d /usr/local/bin && \
+  rm -f "terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
+
+# Clean system
+RUN apt-get clean && \
+  rm -rf /var/lib/apt/lists/* && \
+  rm -rf /etc/apt/sources.list.d/*
+
+# Install Azure Pipelines Agent
+COPY root /
+
+WORKDIR /azp
+
+CMD ["./start.sh"]
