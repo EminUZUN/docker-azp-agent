@@ -87,6 +87,15 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb \
 RUN az extension add -n \
   azure-devops
 
+# Install Docker-CE
+RUN curl -sSL https://get.docker.com/ | bash && \
+  rm -rf /var/lib/apt/lists/* 
+
+# Install Docker Compose
+RUN DOCKER_COMPOSE_VERSION=$(curl -sX GET "https://api.github.com/repos/docker/compose/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]') && \
+  curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+  chmod +x /usr/local/bin/docker-compose
+
 # Install Firefox
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
@@ -216,6 +225,14 @@ RUN PACKER_VERSION=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/packe
   unzip -o "packer_${PACKER_VERSION}_linux_amd64.zip" -d /usr/local/bin && \
   rm -f "packer_${PACKER_VERSION}_linux_amd64.zip"
 
+# Install Powershell Core
+RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb && \
+  dpkg -i packages-microsoft-prod.deb && \
+  apt-get update && \
+  apt-get install -y --no-install-recommends \
+    powershell && \
+  rm -rf /var/lib/apt/lists/*
+
 # Install Python
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
@@ -246,7 +263,5 @@ RUN apt-get clean && \
 
 # Install Azure Pipelines Agent
 COPY root /
-
 WORKDIR /azp
-
 CMD ["./start.sh"]

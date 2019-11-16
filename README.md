@@ -6,8 +6,8 @@ Azure Pipelines Agent images are tagged according to the base OS.
 
 ## Docker Image Contents
 
-- [Ubuntu 16.04](linux/ubuntu/1604)
-- [Ubuntu 18.04](linux/ubuntu/1804)
+- [Ubuntu 16.04](https://github.com/dsavell/docker-azp-agent/tree/master/ubuntu/1604)
+- [Ubuntu 18.04](https://github.com/dsavell/docker-azp-agent/tree/master/ubuntu/1804)
 
 ## Usage
 
@@ -21,6 +21,7 @@ docker run \
   -e AZP_TOKEN=<PAT token> \
   -e AZP_AGENT_NAME=mydockeragent \
   -e AZP_POOL=mypool \
+  -v /var/run/docker.sock:/var/run/docker.sock \
   dsavell/azp-agent:ubuntu-16.04
 ```
 
@@ -32,5 +33,6 @@ docker run \
   -e AZP_TOKEN=<PAT token> \
   -e AZP_AGENT_NAME=myagent \
   -e AZP_POOL=mypool \
+  -v /var/run/docker.sock:/var/run/docker.sock \
   dsavell/azp-agent:ubuntu-18.04
 ```
