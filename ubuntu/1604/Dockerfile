@@ -151,12 +151,43 @@ RUN apt-get update && \
 
 # Install OpenJDK's
 ENV DEFAULT_JDK_VERSION=8
+RUN apt-add-repository -y ppa:openjdk-r/ppa
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
-    openjdk-8-jdk && \
-  rm -rf /var/lib/apt/lists/* && \
-  update-alternatives --set java /usr/lib/jvm/java-${DEFAULT_JDK_VERSION}-openjdk-amd64/jre/bin/java
-ENV JAVA_HOME_8_X64=/usr/lib/jvm/java-8-openjdk-amd64 \
+    openjdk-7-jdk && \
+  rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+     openjdk-8-jdk && \
+  rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+     openjdk-9-jdk && \
+  rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+     openjdk-10-jdk && \
+  rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+     openjdk-11-jdk && \
+  rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+     openjdk-12-jdk && \
+  rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+     openjdk-13-jdk && \
+  rm -rf /var/lib/apt/lists/*
+RUN update-alternatives --set java /usr/lib/jvm/java-${DEFAULT_JDK_VERSION}-openjdk-amd64/jre/bin/java
+ENV JAVA_HOME_7_X64=/usr/lib/jvm/java-7-openjdk-amd64 \
+  JAVA_HOME_8_X64=/usr/lib/jvm/java-8-openjdk-amd64 \
+  JAVA_HOME_9_X64=/usr/lib/jvm/java-8-openjdk-amd64 \
+  JAVA_HOME_10_X64=/usr/lib/jvm/java-8-openjdk-amd64 \
+  JAVA_HOME_11_X64=/usr/lib/jvm/java-8-openjdk-amd64 \
+  JAVA_HOME_12_X64=/usr/lib/jvm/java-8-openjdk-amd64 \
+  JAVA_HOME_13_X64=/usr/lib/jvm/java-8-openjdk-amd64 \
   JAVA_HOME=/usr/lib/jvm/java-${DEFAULT_JDK_VERSION}-openjdk-amd64 \
   JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8
 
