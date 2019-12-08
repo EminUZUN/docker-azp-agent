@@ -72,15 +72,14 @@ RUN add-apt-repository -y ppa:ansible/ansible && \
    rm -rf /var/lib/apt/lists/*
 
 # Install AWS CLI
-RUN curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-  unzip -o awscliv2.zip && \
-  ./aws/install && \
-  rm awscliv2.zip && \
-  rm -rf aws
+RUN curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" && \
+  unzip awscli-bundle.zip && \
+  ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws && \
+  rm awscli-bundle.zip && \
+  rm -rf awscli-bundle
 
 # Install Azure CLI
-RUN curl -sL https://aka.ms/InstallAzureCLIDeb \
-  | bash && \
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
    rm -rf /var/lib/apt/lists/*
 
 # Install Azure CLI Extentsions
@@ -116,22 +115,17 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
   rm -rf /var/lib/apt/lists/*
 
 # Install Go
-RUN curl -sL https://dl.google.com/go/go1.11.13.linux-amd64.tar.gz -o go1.11.13.linux-amd64.tar.gz && \
-  mkdir -p /usr/local/go1.11.13 && \
-  tar -C /usr/local/go1.11.13 -xzf go1.11.13.linux-amd64.tar.gz --strip-components=1 go && \
-  rm go1.11.13.linux-amd64.tar.gz
-RUN curl -sL https://dl.google.com/go/go1.12.13.linux-amd64.tar.gz -o go1.12.13.linux-amd64.tar.gz && \
-  mkdir -p /usr/local/go1.12.13 && \
-  tar -C /usr/local/go1.12.13 -xzf go1.12.13.linux-amd64.tar.gz --strip-components=1 go && \
-  rm go1.12.13.linux-amd64.tar.gz
-RUN curl -sL https://dl.google.com/go/go1.13.4.linux-amd64.tar.gz -o go1.13.4.linux-amd64.tar.gz && \
-  mkdir -p /usr/local/go1.13.4 && \
-  tar -C /usr/local/go1.13.4 -xzf go1.13.4.linux-amd64.tar.gz --strip-components=1 go && \
-  rm go1.13.4.linux-amd64.tar.gz
-ENV GOROOT_1_11_X64=/usr/local/go1.11.13 \
-  GOROOT_1_12_X64=/usr/local/go1.12.13 \
-  GOROOT_1_13_X64=/usr/local/go1.13.4 \
-  GOROOT=/usr/local/go1.12.13
+RUN curl -sL https://dl.google.com/go/go1.12.14.linux-amd64.tar.gz -o go1.12.14.linux-amd64.tar.gz && \
+  mkdir -p /usr/local/go1.12.14 && \
+  tar -C /usr/local/go1.12.14 -xzf go1.12.14.linux-amd64.tar.gz --strip-components=1 go && \
+  rm go1.12.14.linux-amd64.tar.gz
+RUN curl -sL https://dl.google.com/go/go1.13.5.linux-amd64.tar.gz -o go1.13.5.linux-amd64.tar.gz && \
+  mkdir -p /usr/local/go1.13.5 && \
+  tar -C /usr/local/go1.13.5 -xzf go1.13.5.linux-amd64.tar.gz --strip-components=1 go && \
+  rm go1.13.5.linux-amd64.tar.gz
+ENV GOROOT_1_12_X64=/usr/local/go1.12.14 \
+  GOROOT_1_13_X64=/usr/local/go1.13.5 \
+  GOROOT=/usr/local/go1.13.5
 ENV PATH $PATH:$GOROOT/bin
 
 # Install Google Chrome
@@ -170,9 +164,9 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/*
 RUN update-alternatives --set java /usr/lib/jvm/java-${DEFAULT_JDK_VERSION}-openjdk-amd64/jre/bin/java
 ENV JAVA_HOME_8_X64=/usr/lib/jvm/java-8-openjdk-amd64 \
-  JAVA_HOME_11_X64=/usr/lib/jvm/java-8-openjdk-amd64 \
-  JAVA_HOME_12_X64=/usr/lib/jvm/java-8-openjdk-amd64 \
-  JAVA_HOME_13_X64=/usr/lib/jvm/java-8-openjdk-amd64 \
+  JAVA_HOME_11_X64=/usr/lib/jvm/java-11-openjdk-amd64 \
+  JAVA_HOME_12_X64=/usr/lib/jvm/java-12-openjdk-amd64 \
+  JAVA_HOME_13_X64=/usr/lib/jvm/java-13-openjdk-amd64 \
   JAVA_HOME=/usr/lib/jvm/java-${DEFAULT_JDK_VERSION}-openjdk-amd64 \
   JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8
 
