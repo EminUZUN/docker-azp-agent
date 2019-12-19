@@ -179,7 +179,7 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/*
 
 ## Install Maven
-ENV DEFAULT_MVN_VERSION=3.6.2
+ENV DEFAULT_MVN_VERSION=3.6.3
 RUN curl -sL https://www-eu.apache.org/dist/maven/maven-3/"${DEFAULT_MVN_VERSION}"/binaries/apache-maven-"${DEFAULT_MVN_VERSION}"-bin.zip -o maven.zip && \
   unzip -d /usr/share maven.zip && \
   rm maven.zip && \
