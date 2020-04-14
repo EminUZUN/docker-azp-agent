@@ -78,6 +78,12 @@ RUN curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.
   rm awscli-bundle.zip && \
   rm -rf awscli-bundle
 
+# Install AzCopy
+RUN wget -O azcopy.tar.gz https://aka.ms/downloadazcopylinux64 && \
+  tar -xf azcopy.tar.gz && \
+  rm azcopy.tar.gz && \
+  ./install.sh
+
 # Install Azure CLI
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
    rm -rf /var/lib/apt/lists/*
@@ -115,17 +121,17 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
   rm -rf /var/lib/apt/lists/*
 
 # Install Go
-RUN curl -sL https://dl.google.com/go/go1.12.14.linux-amd64.tar.gz -o go1.12.14.linux-amd64.tar.gz && \
-  mkdir -p /usr/local/go1.12.14 && \
-  tar -C /usr/local/go1.12.14 -xzf go1.12.14.linux-amd64.tar.gz --strip-components=1 go && \
-  rm go1.12.14.linux-amd64.tar.gz
-RUN curl -sL https://dl.google.com/go/go1.13.5.linux-amd64.tar.gz -o go1.13.5.linux-amd64.tar.gz && \
-  mkdir -p /usr/local/go1.13.5 && \
-  tar -C /usr/local/go1.13.5 -xzf go1.13.5.linux-amd64.tar.gz --strip-components=1 go && \
-  rm go1.13.5.linux-amd64.tar.gz
-ENV GOROOT_1_12_X64=/usr/local/go1.12.14 \
-  GOROOT_1_13_X64=/usr/local/go1.13.5 \
-  GOROOT=/usr/local/go1.13.5
+RUN curl -sL https://dl.google.com/go/go1.13.10.linux-amd64.tar.gz -o go1.13.10.linux-amd64.tar.gz && \
+  mkdir -p /usr/local/go1.13.10 && \
+  tar -C /usr/local/go1.13.10 -xzf go1.13.10.linux-amd64.tar.gz --strip-components=1 go && \
+  rm go1.13.10.linux-amd64.tar.gz
+RUN curl -sL https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz -o go1.14.2.linux-amd64.tar.gz && \
+  mkdir -p /usr/local/go1.14.2 && \
+  tar -C /usr/local/go1.14.2 -xzf go1.14.2.linux-amd64.tar.gz --strip-components=1 go && \
+  rm go1.14.2.linux-amd64.tar.gz
+ENV GOROOT_1_13_X64=/usr/local/go1.13.10 \
+  GOROOT_1_14_X64=/usr/local/go1.14.2 \
+  GOROOT=/usr/local/go1.14.2
 ENV PATH $PATH:$GOROOT/bin
 
 # Install Google Chrome
