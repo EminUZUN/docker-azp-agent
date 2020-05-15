@@ -23,3 +23,15 @@ docker run \
   -v /var/run/docker.sock:/var/run/docker.sock \
   dsavell/azp-agent:ubuntu-18.04
 ```
+
+### Ubuntu 20.04
+
+```
+docker run \
+  -e AZP_URL=<Azure DevOps instance> \
+  -e AZP_TOKEN=<PAT token> \
+  -e AZP_AGENT_NAME=myagent \
+  -e AZP_POOL=mypool \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  dsavell/azp-agent:ubuntu-20.04
+```

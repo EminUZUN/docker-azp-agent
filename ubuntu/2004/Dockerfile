@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -15,6 +15,7 @@ RUN \
     fakeroot \
     file \
     ftp \
+    gpg-agent \
     iproute2 \
     iputils-ping \
     jq \
@@ -69,12 +70,12 @@ RUN \
   rm -rf /var/lib/apt/lists/*
 
 # Install Ansible PPA and latest Ansible
-RUN \
-  add-apt-repository -y ppa:ansible/ansible && \
-  apt-get update && \
-  apt-get install -y --no-install-recommends \
-    ansible && \
-  rm -rf /var/lib/apt/lists/*
+#RUN \
+#  add-apt-repository -y ppa:ansible/ansible && \
+#  apt-get update && \
+#  apt-get install -y --no-install-recommends \
+#    ansible && \
+#  rm -rf /var/lib/apt/lists/*
 
 # Install AWS CLI v2
 RUN \
@@ -92,25 +93,25 @@ RUN \
   ./install.sh
 
 # Install Azure CLI
-RUN \
-  curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
-  rm -rf /var/lib/apt/lists/*
+#RUN \
+#  curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
+#  rm -rf /var/lib/apt/lists/*
 
 # Install Azure CLI Extentsions
-RUN \
-  az extension add -n \
-  azure-devops
+#RUN \
+#  az extension add -n \
+#  azure-devops
 
 # Install Docker-CE
-RUN \
-  curl -sSL https://get.docker.com/ | bash && \
-  rm -rf /var/lib/apt/lists/*
+#RUN \
+#  curl -sSL https://get.docker.com/ | bash && \
+#  rm -rf /var/lib/apt/lists/*
 
 # Install Docker Compose
-RUN \
-  DOCKER_COMPOSE_VERSION=$(curl -sX GET "https://api.github.com/repos/docker/compose/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]') && \
-  curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
-  chmod +x /usr/local/bin/docker-compose
+#RUN \
+#  DOCKER_COMPOSE_VERSION=$(curl -sX GET "https://api.github.com/repos/docker/compose/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]') && \
+#  curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+#  chmod +x /usr/local/bin/docker-compose
 
 # Install Firefox
 RUN \
@@ -128,11 +129,11 @@ RUN \
   rm -rf /var/lib/apt/lists/*
 
 # Install Git LFS
-RUN \
-  curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
-  apt-get install -y --no-install-recommends \
-    git-lfs && \
-  rm -rf /var/lib/apt/lists/*
+#RUN \
+#  curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
+#  apt-get install -y --no-install-recommends \
+#    git-lfs && \
+#  rm -rf /var/lib/apt/lists/*
 
 # Install Go
 RUN \
@@ -151,14 +152,14 @@ ENV GOROOT_1_13_X64=/usr/local/go1.13.10 \
 ENV PATH $PATH:$GOROOT/bin
 
 # Install Google Chrome
-RUN \
-  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-  echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list && \
-  apt-get update && \
-  apt-get install -y --no-install-recommends \
-    google-chrome-stable && \
-  rm -rf /var/lib/apt/lists/*
-ENV CHROME_BIN=/usr/bin/google-chrome
+#RUN \
+#  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+#  echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list && \
+#  apt-get update && \
+#  apt-get install -y --no-install-recommends \
+#    google-chrome-stable && \
+#  rm -rf /var/lib/apt/lists/*
+#ENV CHROME_BIN=/usr/bin/google-chrome
 
 # Install Httpie
 RUN \
@@ -168,7 +169,7 @@ RUN \
   rm -rf /var/lib/apt/lists/*
 
 # Install OpenJDK's
-ENV DEFAULT_JDK_VERSION=8
+ENV DEFAULT_JDK_VERSION=11
 RUN \
   apt-add-repository -y ppa:openjdk-r/ppa
 RUN \
@@ -197,7 +198,7 @@ RUN \
     openjdk-14-jdk && \
   rm -rf /var/lib/apt/lists/*
 RUN \
-  update-alternatives --set java /usr/lib/jvm/java-${DEFAULT_JDK_VERSION}-openjdk-amd64/jre/bin/java
+  update-alternatives --set java /usr/lib/jvm/java-${DEFAULT_JDK_VERSION}-openjdk-amd64/bin/java
 ENV JAVA_HOME_8_X64=/usr/lib/jvm/java-8-openjdk-amd64 \
   JAVA_HOME_11_X64=/usr/lib/jvm/java-11-openjdk-amd64 \
   JAVA_HOME_12_X64=/usr/lib/jvm/java-12-openjdk-amd64 \
@@ -237,18 +238,18 @@ RUN \
 ENV GRADLE_HOME=/usr/share/gradle
 
 # Install kubectl
-RUN \
-  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
-  touch /etc/apt/sources.list.d/kubernetes.list && \
-  echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list && \
-  apt-get update && \
-  apt-get install -y --no-install-recommends \
-    kubectl && \
-  rm -rf /var/lib/apt/lists/*
+#RUN \
+#  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
+#  touch /etc/apt/sources.list.d/kubernetes.list && \
+#  echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list && \
+#  apt-get update && \
+#  apt-get install -y --no-install-recommends \
+#    kubectl && \
+#  rm -rf /var/lib/apt/lists/*
 
 # Install Helm 3
-RUN \
-  curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+#RUN \
+#  curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
 # Install MySQL Client
 RUN \
@@ -257,9 +258,9 @@ RUN \
     mysql-client && \
   rm -rf /var/lib/apt/lists/*
 
-# Install Node.js
+# Install Node.js v14.x
 RUN \
-  curl -sL https://deb.nodesource.com/setup_12.x | bash && \
+  curl -sL https://deb.nodesource.com/setup_14.x | bash && \
   apt-get install -y --no-install-recommends \
     nodejs -y && \
   rm -rf /var/lib/apt/lists/*
@@ -281,25 +282,25 @@ RUN \
   rm -f "packer_${PACKER_VERSION}_linux_amd64.zip"
 
 # Install Powershell Core
-RUN \
-  wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb && \
-  dpkg -i packages-microsoft-prod.deb && \
-  apt-get update && \
-  apt-get install -y --no-install-recommends \
-    powershell && \
-  rm -rf /var/lib/apt/lists/*
+#RUN \
+#  wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb && \
+#  dpkg -i packages-microsoft-prod.deb && \
+#  apt-get update && \
+#  apt-get install -y --no-install-recommends \
+#    powershell && \
+#  rm -rf /var/lib/apt/lists/*
 
 # Install Python
-RUN \
-  apt-get update && \
-  apt-get install -y --no-install-recommends \
-    python \
-    python-dev \
-    python-pip \
-    python3 \
-    python3-dev \
-    python3-pip && \
-  rm -rf /var/lib/apt/lists/*
+#RUN \
+#  apt-get update && \
+#  apt-get install -y --no-install-recommends \
+#    python \
+#    python-dev \
+#    python-pip \
+#    python3 \
+#    python3-dev \
+#    python3-pip && \
+#  rm -rf /var/lib/apt/lists/*
 
 # Install Subversion
 RUN \
