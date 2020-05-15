@@ -7,6 +7,7 @@ Azure Pipelines Agent images are tagged according to the base OS.
 ## Docker Image Contents
 
 - [Ubuntu 18.04](https://github.com/dsavell/docker-azp-agent/tree/master/ubuntu/1804)
+- [Ubuntu 20.04](https://github.com/dsavell/docker-azp-agent/tree/master/ubuntu/2004)
 
 ## Usage
 
