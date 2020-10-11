@@ -2,6 +2,10 @@ FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# APT always -y
+RUN \
+  echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
+
 # Install basic command-line utilities
 RUN \
   apt-get update && \
@@ -22,6 +26,7 @@ RUN \
     libcurl4 \
     libgconf-2-4 \
     libsecret-1-dev \
+    libssl1.0 \
     libunwind8 \
     libxkbfile-dev \
     libxss1 \
@@ -69,13 +74,12 @@ RUN \
     p7zip-rar && \
   rm -rf /var/lib/apt/lists/*
 
-# Install Ansible PPA and latest Ansible
-#RUN \
-#  add-apt-repository -y ppa:ansible/ansible && \
-#  apt-get update && \
-#  apt-get install -y --no-install-recommends \
-#    ansible && \
-#  rm -rf /var/lib/apt/lists/*
+# Install Ansible
+RUN \
+  apt-get update && \
+  apt-get install -y --no-install-recommends \
+    ansible && \
+  rm -rf /var/lib/apt/lists/*
 
 # Install AWS CLI v2
 RUN \
@@ -281,15 +285,6 @@ RUN \
   unzip -o "packer_${PACKER_VERSION}_linux_amd64.zip" -d /usr/local/bin && \
   rm -f "packer_${PACKER_VERSION}_linux_amd64.zip"
 
-# Install Powershell Core
-#RUN \
-#  wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && \
-#  dpkg -i packages-microsoft-prod.deb && \
-#  apt-get update && \
-#  apt-get install -y --no-install-recommends \
-#    powershell && \
-#  rm -rf /var/lib/apt/lists/*
-
 # Install Python
 RUN \
   apt-get update && \
@@ -322,4 +317,5 @@ RUN \
 # Install Azure Pipelines Agent
 COPY root /
 WORKDIR /azp
+RUN chmod +x start.sh
 CMD ["./start.sh"]
